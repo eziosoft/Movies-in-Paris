@@ -16,6 +16,10 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+
+// compose reports
+// generate: ./gradlew assembleRelease -Pmyapp.enableComposeCompilerReports=true
+// reports in app/build/compose_metrics
 subprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         kotlinOptions {
