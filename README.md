@@ -1,8 +1,3 @@
-# paging3ComposeExample
+# Movies in Paris
 
-
-to get compose metrics run 
-```
-./gradlew assembleRelease -Pmyapp.enableComposeCompilerReports=true
-```
-reports in `app/build/compose_metrics`
+##The Android application list and shows on the map movie shooting locations in Paris.
