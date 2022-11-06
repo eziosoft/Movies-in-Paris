@@ -77,10 +77,7 @@ fun NavigationComponent(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(
-                            modifier = Modifier,
-                            text = "Movies in Paris"
-                        )
+                       TopBar()
                     },
                     actions = {
                         IconButton(onClick = { showMenu = !showMenu }) {

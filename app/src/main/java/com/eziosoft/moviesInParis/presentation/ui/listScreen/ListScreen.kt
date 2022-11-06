@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.eziosoft.moviesInParis.domain.repository.DBState
+import com.eziosoft.moviesInParis.presentation.ui.components.SearchBox
 import com.eziosoft.moviesInParis.presentation.ui.movieDetailsBottomSheet.MovieDetailsBottomSheet
 import com.eziosoft.moviesInParis.presentation.ui.rotating
 import org.koin.androidx.compose.getViewModel
@@ -72,7 +73,7 @@ private fun SearchAndList(
     listState: LazyGridState
 ) {
     Column {
-        Search(
+        SearchBox(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
@@ -132,43 +133,4 @@ private fun SearchAndList(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun Search(
-    modifier: Modifier = Modifier,
-    onSearch: (String) -> Unit
-) {
-    val keyboardController = LocalSoftwareKeyboardController.current
 
-    var text by rememberSaveable {
-        mutableStateOf("")
-    }
-    Column(
-        modifier = modifier
-    ) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = text,
-                maxLines = 1,
-                singleLine = true,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Search"
-                    )
-                },
-                label = { Text(text = "Search title") },
-                onValueChange = {
-                    text = it
-                    onSearch(text)
-                },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default),
-                keyboardActions = KeyboardActions(onDone = {
-                    onSearch(text)
-                    keyboardController?.hide()
-                })
-            )
-        }
-    }
-}
