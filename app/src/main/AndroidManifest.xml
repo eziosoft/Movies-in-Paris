@@ -18,7 +18,7 @@
             android:value="@string/MAP_API_KEY" />
 
         <activity
-            android:name=".presentation.ui.mainScreen.MainActivity"
+            android:name="com.eziosoft.moviesInParis.presentation.ui.mainScreen.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.ParisInNumbers">
             <intent-filter>
