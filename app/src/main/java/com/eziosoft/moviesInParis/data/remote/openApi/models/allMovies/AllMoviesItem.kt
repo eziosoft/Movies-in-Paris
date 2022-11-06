@@ -1,5 +1,8 @@
 package com.eziosoft.moviesInParis.data.remote.openApi.models.allMovies
 
+import androidx.annotation.Keep
+
+@Keep
 data class AllMoviesItem(
     val adresse_lieu: String?,
     val annee_tournage: String?,
