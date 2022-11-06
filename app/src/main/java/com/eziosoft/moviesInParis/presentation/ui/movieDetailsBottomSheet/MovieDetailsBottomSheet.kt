@@ -19,9 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.eziosoft.moviesInParis.domain.Movie
-import org.koin.androidx.compose.getViewModel
 import com.eziosoft.parisinnumbers.R
-
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun MovieDetailsBottomSheet() {

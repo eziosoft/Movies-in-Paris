@@ -1,5 +1,8 @@
 package com.eziosoft.moviesInParis.data.remote.theMovieDbApi.models
 
+import androidx.annotation.Keep
+
+@Keep
 data class MovieResult(
     val adult: Boolean,
     val backdrop_path: String?,
