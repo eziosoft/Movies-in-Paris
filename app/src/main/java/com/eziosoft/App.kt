@@ -1,10 +1,10 @@
 package com.eziosoft
 
 import android.app.Application
-import com.eziosoft.parisinnumbers.data.apiModule
-import com.eziosoft.parisinnumbers.data.local.room.roomModule
-import com.eziosoft.parisinnumbers.navigation.navigationModule
-import com.eziosoft.parisinnumbers.presentationModule
+import com.eziosoft.moviesInParis.data.apiModule
+import com.eziosoft.moviesInParis.data.local.room.roomModule
+import com.eziosoft.moviesInParis.navigation.navigationModule
+import com.eziosoft.moviesInParis.presentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
