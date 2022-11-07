@@ -40,7 +40,20 @@ class ListScreenViewModel(
                 when (it) {
                     DBState.Unknown -> Unit
                     DBState.Updating -> Unit
-                    DBState.Ready -> observeSearch()
+                    DBState.Ready -> {
+                        observeActions()
+                        observeSearch()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeActions() {
+        viewModelScope.launch {
+            actionDispatcher.actionFlow.collect() { action ->
+                if (action is Action.SearchMovie) {
+                    search(action.text)
                 }
             }
         }

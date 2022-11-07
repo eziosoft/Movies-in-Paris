@@ -6,28 +6,17 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.eziosoft.moviesInParis.domain.repository.DBState
-import com.eziosoft.moviesInParis.presentation.ui.components.SearchBox
 import com.eziosoft.moviesInParis.presentation.ui.movieDetailsBottomSheet.MovieDetailsBottomSheet
 import com.eziosoft.moviesInParis.presentation.ui.rotating
 import org.koin.androidx.compose.getViewModel
@@ -73,14 +62,14 @@ private fun SearchAndList(
     listState: LazyGridState
 ) {
     Column {
-        SearchBox(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            onSearch = {
-                viewModel.search(it)
-            }
-        )
+//        SearchBox(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(10.dp),
+//            onSearch = {
+//                viewModel.search(it)
+//            }
+//        )
         if (state.items.isNotEmpty() || state.isLoading) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -132,5 +121,3 @@ private fun SearchAndList(
         }
     }
 }
-
-

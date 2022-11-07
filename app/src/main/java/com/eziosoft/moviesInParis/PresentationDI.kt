@@ -2,6 +2,7 @@ package com.eziosoft.moviesInParis
 
 import com.eziosoft.moviesInParis.presentation.ProjectDispatchers
 import com.eziosoft.moviesInParis.presentation.ui.listScreen.ListScreenViewModel
+import com.eziosoft.moviesInParis.presentation.ui.mainScreen.MainScreenViewModel
 import com.eziosoft.moviesInParis.presentation.ui.mapScreen.MapScreenViewModel
 import com.eziosoft.moviesInParis.presentation.ui.movieDetailsBottomSheet.MovieDetailsBottomSheetViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -22,5 +23,9 @@ val presentationModule = module {
 
     viewModel {
         MovieDetailsBottomSheetViewModel(get(), get(), get())
+    }
+
+    viewModel {
+        MainScreenViewModel(get())
     }
 }

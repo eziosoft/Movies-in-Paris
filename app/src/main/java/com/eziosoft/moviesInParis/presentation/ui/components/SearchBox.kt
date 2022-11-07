@@ -3,9 +3,7 @@ package com.eziosoft.moviesInParis.presentation.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
@@ -16,10 +14,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import com.eziosoft.parisinnumbers.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -33,8 +30,10 @@ fun SearchBox(
         mutableStateOf("")
     }
     TextField(
+        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
         modifier = modifier,
         value = text,
+        placeholder = { Text("Search") },
         maxLines = 1,
         singleLine = true,
         leadingIcon = {
@@ -48,12 +47,12 @@ fun SearchBox(
                 modifier = Modifier.clickable {
                     text = ""
                     onSearch(text)
+                    keyboardController?.hide()
                 },
                 imageVector = Icons.Filled.Clear,
                 contentDescription = "Clear"
             )
         },
-        label = { Text(text = stringResource(R.string.search)) },
         onValueChange = {
             text = it
             onSearch(text)
@@ -65,4 +64,3 @@ fun SearchBox(
         })
     )
 }
-
