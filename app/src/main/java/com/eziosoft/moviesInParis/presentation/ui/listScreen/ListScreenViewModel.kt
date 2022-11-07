@@ -53,7 +53,7 @@ class ListScreenViewModel(
         viewModelScope.launch {
             actionDispatcher.actionFlow.collect() { action ->
                 if (action is Action.SearchMovie) {
-                    search(action.text)
+                    search(action.searchText)
                 }
             }
         }

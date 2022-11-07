@@ -61,62 +61,52 @@ private fun SearchAndList(
     state: ScreenState,
     listState: LazyGridState
 ) {
-    Column {
-//        SearchBox(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(10.dp),
-//            onSearch = {
-//                viewModel.search(it)
-//            }
-//        )
-        if (state.items.isNotEmpty() || state.isLoading) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(16.dp),
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = listState
-            ) {
-                items(state.items.size) { i ->
-                    if (i >= state.items.size - 1 &&
-                        !state.endReached &&
-                        !state.isLoading
-                    ) {
-                        viewModel.loadNextItems()
-                    }
-                    val item = state.items[i]
-                    ListItem(item, onClick = {
-                        viewModel.showMovieDetails(
-                            id = it,
-                            content = {
-                                MovieDetailsBottomSheet()
-                            }
-                        )
-                    })
+    if (state.items.isNotEmpty() || state.isLoading) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(16.dp),
+            modifier = Modifier
+                .fillMaxSize(),
+            state = listState
+        ) {
+            items(state.items.size) { i ->
+                if (i >= state.items.size - 1 &&
+                    !state.endReached &&
+                    !state.isLoading
+                ) {
+                    viewModel.loadNextItems()
                 }
-                item {
-                    if (state.isLoading) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            LinearProgressIndicator()
+                val item = state.items[i]
+                ListItem(item, onClick = {
+                    viewModel.showMovieDetails(
+                        id = it,
+                        content = {
+                            MovieDetailsBottomSheet()
                         }
+                    )
+                })
+            }
+            item {
+                if (state.isLoading) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        LinearProgressIndicator()
                     }
                 }
             }
-        } else {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "empty list"
-                    )
-                    Text("Not found")
-                }
+        }
+    } else {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "empty list"
+                )
+                Text("Not found")
             }
         }
     }

@@ -24,13 +24,14 @@ interface MovieDao {
     )
     fun getPaged(rowNumber: Int, pageSize: Int, searchString: String): List<LocalMovie>
 
-    @Query("SELECT * FROM movies WHERE lat>:lat1 AND lon>:lon1 AND lat<:lat2 AND lon<:lon2 LIMIT :numberOfResults")
+    @Query("SELECT * FROM movies WHERE lat>:lat1 AND lon>:lon1 AND lat<:lat2 AND lon<:lon2 AND (title LIKE '%' || :searchString || '%') LIMIT :numberOfResults")
     fun getByPosition(
         lat1: Double,
         lon1: Double,
         lat2: Double,
         lon2: Double,
-        numberOfResults: Int
+        numberOfResults: Int,
+        searchString: String
     ): List<LocalMovie>
 
     @Query("SELECT (SELECT COUNT(*) FROM movies) == 0")

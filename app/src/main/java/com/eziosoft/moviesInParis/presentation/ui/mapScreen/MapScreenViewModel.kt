@@ -28,17 +28,34 @@ class MapScreenViewModel(
     private val projectDispatchers: ProjectDispatchers
 ) : ViewModel() {
 
+    val DEFAULT_BOUNDS = LatLngBounds(
+        LatLng(48.704137980738714, 2.1965618804097176),
+        LatLng(49.01802783318708, 2.4790672212839127)
+    )
+
     var screenState by mutableStateOf(ScreenState())
         private set
+
+    private var searchString: String = ""
+    private var mapBounds: LatLngBounds = DEFAULT_BOUNDS
 
     init {
         generateHeatMap()
         getMarkers(
-            LatLngBounds(
-                LatLng(48.704137980738714, 2.1965618804097176),
-                LatLng(49.01802783318708, 2.4790672212839127)
-            )
+            DEFAULT_BOUNDS
         )
+        observeActions()
+    }
+
+    private fun observeActions() {
+        viewModelScope.launch {
+            actionDispatcher.actionFlow.collect() { action ->
+                if (action is Action.SearchMovie) {
+                    searchString = action.searchText
+                    getMarkers(mapBounds)
+                }
+            }
+        }
     }
 
     private fun generateHeatMap() {
@@ -52,6 +69,8 @@ class MapScreenViewModel(
     }
 
     fun getMarkers(bonds: LatLngBounds) {
+        mapBounds = bonds
+
         Log.d("aaa", "getMarkers: $bonds")
         viewModelScope.launch(projectDispatchers.ioDispatcher) {
             val markers = dbRepository.getByLocation(
@@ -59,7 +78,8 @@ class MapScreenViewModel(
                 bonds.southwest.longitude,
                 bonds.northeast.latitude,
                 bonds.northeast.longitude,
-                numberOfResults = 100
+                numberOfResults = 100,
+                searchString = searchString
             )
             withContext(projectDispatchers.mainDispatcher) {
                 screenState = screenState.copy(markers = markers)

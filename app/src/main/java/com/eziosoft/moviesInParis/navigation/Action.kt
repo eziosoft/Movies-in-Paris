@@ -4,5 +4,5 @@ sealed class Action {
     data class Navigate(val destination: Destination) : Action()
     data class ToggleBottomSheet(val expanded: Boolean) : Action()
     data class ShowSnackbar(val text: String) : Action()
-    data class SearchMovie(val text: String) : Action()
+    data class SearchMovie(val searchText: String) : Action()
 }

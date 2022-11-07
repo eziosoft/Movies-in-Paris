@@ -86,7 +86,8 @@ class LocalDbRepositoryImplLocal(
         lon1: Double,
         lat2: Double,
         lon2: Double,
-        numberOfResults: Int
+        numberOfResults: Int,
+        searchString: String
     ): List<Movie> =
-        movieDao.getByPosition(lat1, lon1, lat2, lon2, numberOfResults).map { it.toMovie() }
+        movieDao.getByPosition(lat1, lon1, lat2, lon2, numberOfResults, searchString).map { it.toMovie() }
 }
