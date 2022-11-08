@@ -13,6 +13,8 @@ import com.eziosoft.moviesInParis.presentation.ProjectDispatchers
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.heatmaps.HeatmapTileProvider
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -22,16 +24,17 @@ data class ScreenState(
     val selectedMovie: Movie? = null
 )
 
+
+private val DEFAULT_BOUNDS = LatLngBounds(
+    LatLng(48.704137980738714, 2.1965618804097176),
+    LatLng(49.01802783318708, 2.4790672212839127)
+)
+
 class MapScreenViewModel(
     private val dbRepository: LocalDatabaseRepository,
     val actionDispatcher: ActionDispatcher,
     private val projectDispatchers: ProjectDispatchers
 ) : ViewModel() {
-
-    val DEFAULT_BOUNDS = LatLngBounds(
-        LatLng(48.704137980738714, 2.1965618804097176),
-        LatLng(49.01802783318708, 2.4790672212839127)
-    )
 
     var screenState by mutableStateOf(ScreenState())
         private set
@@ -47,9 +50,10 @@ class MapScreenViewModel(
         observeActions()
     }
 
+    @OptIn(FlowPreview::class)
     private fun observeActions() {
         viewModelScope.launch {
-            actionDispatcher.actionFlow.collect() { action ->
+            actionDispatcher.actionFlow.debounce(1000).collect() { action ->
                 if (action is Action.SearchMovie) {
                     searchString = action.searchText
                     getMarkers(mapBounds)

@@ -99,7 +99,7 @@ class ListScreenViewModel(
     @OptIn(FlowPreview::class)
     private fun observeSearch() {
         viewModelScope.launch(projectDispatchers.mainDispatcher) {
-            searchFlow.debounce(1500).collect {
+            searchFlow.debounce(1000).collect {
                 searchString = it.trim()
                 paginator.reset()
                 state = state.copy(items = emptyList())
@@ -107,23 +107,6 @@ class ListScreenViewModel(
             }
         }
     }
-
-//    fun searchInfoAboutMovie(title: String, callback: (posterUrl: String) -> Unit) =
-//        viewModelScope.launch(projectDispatchers.ioDispatcher) {
-//            movieDbRepository.search(title).onSuccess { list ->
-//                list?.let { listOfMovies ->
-//                    if (listOfMovies.isNotEmpty()) {
-//                        listOfMovies.forEach { movie ->
-//                            if (movie.title?.uppercase() == title.uppercase() && movie.poster_path != null) {
-//                                callback(movie.poster_path)
-//                            }
-//                        }
-//                    }
-//                }
-//            }.onFailure {
-//                Log.d("aaa", "searchInfoAboutMovie: isFailure ${it.message}")
-//            }
-//        }
 
     fun showMovieDetails(id: String, content: @Composable () -> Unit) {
         viewModelScope.launch {
