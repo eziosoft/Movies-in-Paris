@@ -20,20 +20,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.eziosoft.moviesInParis.navigation.Action
-import com.eziosoft.moviesInParis.navigation.ActionDispatcher
 import com.eziosoft.moviesInParis.navigation.Destination
 import com.eziosoft.moviesInParis.presentation.ui.listScreen.listScreen
 import com.eziosoft.moviesInParis.presentation.ui.mapScreen.mapScreen
 import com.eziosoft.moviesInParis.presentation.ui.theme.PrimaryLight
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NavigationComponent(
-    actionDispatcher: ActionDispatcher,
-    modifier: Modifier = Modifier
-) {
+fun MainScreen(modifier: Modifier = Modifier) {
+    val viewModel = getViewModel<MainScreenViewModel>()
+
     val navController: NavHostController = rememberNavController()
     val startDestination: String = Destination.LIST_SCREEN.name
 
@@ -43,7 +43,7 @@ fun NavigationComponent(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
-        actionDispatcher.actionFlow.collect() { action ->
+        viewModel.actionDispatcher.actionFlow.collect() { action ->
             processAction(
                 action,
                 navController,
@@ -64,7 +64,7 @@ fun NavigationComponent(
                     .background(PrimaryLight)
                     .padding(8.dp)
             ) {
-                actionDispatcher.sharedParameters.bottomSheetContent.value()
+                viewModel.actionDispatcher.sharedParameters.bottomSheetContent.value()
             }
         },
         sheetPeekHeight = 0.dp
@@ -77,9 +77,12 @@ fun NavigationComponent(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(
-                            modifier = Modifier,
-                            text = "Movies in Paris"
+                        TopBar(
+                            onSearch = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    viewModel.actionDispatcher.dispatchAction(Action.SearchMovie(it))
+                                }
+                            }
                         )
                     },
                     actions = {
@@ -141,44 +144,5 @@ fun NavigationComponent(
                 mapScreen()
             }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-private fun processAction(
-    action: Action,
-    navController: NavHostController,
-    coroutineScope: CoroutineScope,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
-) {
-    when (action) {
-        is Action.Navigate ->
-            when (action.destination) {
-                Destination.LIST_SCREEN -> navController.popBackStack(
-                    Destination.LIST_SCREEN.name,
-                    inclusive = false
-                )
-                Destination.DETAILS_SCREEN -> navController.navigate(
-                    Destination.DETAILS_SCREEN.name
-                )
-                Destination.MAP_SCREEN -> navController.popBackStack(
-                    Destination.MAP_SCREEN.name,
-                    inclusive = false
-                )
-            }
-        is Action.ToggleBottomSheet -> {
-            coroutineScope.launch {
-                if (action.expanded) {
-                    bottomSheetScaffoldState.bottomSheetState.expand()
-                } else {
-                    bottomSheetScaffoldState.bottomSheetState.collapse()
-                }
-            }
-        }
-
-        is Action.ShowSnackbar ->
-            coroutineScope.launch {
-                bottomSheetScaffoldState.snackbarHostState.showSnackbar(action.text)
-            }
     }
 }

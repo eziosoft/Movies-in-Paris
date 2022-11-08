@@ -13,6 +13,8 @@ import com.eziosoft.moviesInParis.presentation.ProjectDispatchers
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.heatmaps.HeatmapTileProvider
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,6 +22,12 @@ data class ScreenState(
     val markers: List<Movie> = emptyList(),
     val heatmapTileProvider: HeatmapTileProvider? = null,
     val selectedMovie: Movie? = null
+)
+
+
+private val DEFAULT_BOUNDS = LatLngBounds(
+    LatLng(48.704137980738714, 2.1965618804097176),
+    LatLng(49.01802783318708, 2.4790672212839127)
 )
 
 class MapScreenViewModel(
@@ -31,14 +39,27 @@ class MapScreenViewModel(
     var screenState by mutableStateOf(ScreenState())
         private set
 
+    private var searchString: String = ""
+    private var mapBounds: LatLngBounds = DEFAULT_BOUNDS
+
     init {
         generateHeatMap()
         getMarkers(
-            LatLngBounds(
-                LatLng(48.704137980738714, 2.1965618804097176),
-                LatLng(49.01802783318708, 2.4790672212839127)
-            )
+            DEFAULT_BOUNDS
         )
+        observeActions()
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeActions() {
+        viewModelScope.launch {
+            actionDispatcher.actionFlow.debounce(1000).collect() { action ->
+                if (action is Action.SearchMovie) {
+                    searchString = action.searchText
+                    getMarkers(mapBounds)
+                }
+            }
+        }
     }
 
     private fun generateHeatMap() {
@@ -52,6 +73,8 @@ class MapScreenViewModel(
     }
 
     fun getMarkers(bonds: LatLngBounds) {
+        mapBounds = bonds
+
         Log.d("aaa", "getMarkers: $bonds")
         viewModelScope.launch(projectDispatchers.ioDispatcher) {
             val markers = dbRepository.getByLocation(
@@ -59,7 +82,8 @@ class MapScreenViewModel(
                 bonds.southwest.longitude,
                 bonds.northeast.latitude,
                 bonds.northeast.longitude,
-                numberOfResults = 100
+                numberOfResults = 100,
+                searchString = searchString
             )
             withContext(projectDispatchers.mainDispatcher) {
                 screenState = screenState.copy(markers = markers)
