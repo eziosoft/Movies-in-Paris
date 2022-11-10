@@ -24,7 +24,6 @@ data class ScreenState(
     val selectedMovie: Movie? = null
 )
 
-
 private val DEFAULT_BOUNDS = LatLngBounds(
     LatLng(48.704137980738714, 2.1965618804097176),
     LatLng(49.01802783318708, 2.4790672212839127)
