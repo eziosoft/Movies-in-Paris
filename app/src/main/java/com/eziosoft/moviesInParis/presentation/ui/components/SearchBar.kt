@@ -16,11 +16,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBox(
+fun SearchBar(
     modifier: Modifier = Modifier,
     onSearch: (String) -> Unit
 ) {
@@ -33,7 +34,7 @@ fun SearchBox(
         colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
         modifier = modifier,
         value = text,
-        placeholder = { Text("Search") },
+        placeholder = { Text(stringResource(com.eziosoft.parisinnumbers.R.string.search)) },
         maxLines = 1,
         singleLine = true,
         leadingIcon = {
@@ -50,7 +51,7 @@ fun SearchBox(
                     keyboardController?.hide()
                 },
                 imageVector = Icons.Filled.Clear,
-                contentDescription = "Clear"
+                contentDescription = stringResource(com.eziosoft.parisinnumbers.R.string.clear)
             )
         },
         onValueChange = {

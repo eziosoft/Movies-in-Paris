@@ -1,6 +1,5 @@
 package com.eziosoft.moviesInParis.data.remote
 
-import android.util.Log
 import com.eziosoft.moviesInParis.data.local.room.movieDetails.LocalMovieDetails
 import com.eziosoft.moviesInParis.data.local.room.movieDetails.MovieDetailsDao
 import com.eziosoft.moviesInParis.data.remote.theMovieDbApi.TheMovieDbApi
@@ -19,7 +18,6 @@ class TheMovieDbApiRepositoryImpl(
         if (listFromRoom.isNotEmpty()) {
             return listFromRoom.first()
         } else {
-            Log.i("aaa", "THE MOVIE DB CALL")
             val response = api.search(apiKey, query)
 
             if (response.isSuccessful) {

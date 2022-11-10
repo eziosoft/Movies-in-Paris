@@ -1,11 +1,13 @@
 package com.eziosoft.moviesInParis.presentation.ui.mapScreen
 
-import android.util.Log
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eziosoft.moviesInParis.domain.Movie
+import com.eziosoft.moviesInParis.domain.repository.DBState
 import com.eziosoft.moviesInParis.domain.repository.LocalDatabaseRepository
 import com.eziosoft.moviesInParis.navigation.Action
 import com.eziosoft.moviesInParis.navigation.ActionDispatcher
@@ -19,11 +21,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 data class ScreenState(
+    val dbState: DBState = DBState.Unknown,
     val markers: List<Movie> = emptyList(),
     val heatmapTileProvider: HeatmapTileProvider? = null,
     val selectedMovie: Movie? = null
 )
-
 
 private val DEFAULT_BOUNDS = LatLngBounds(
     LatLng(48.704137980738714, 2.1965618804097176),
@@ -43,11 +45,24 @@ class MapScreenViewModel(
     private var mapBounds: LatLngBounds = DEFAULT_BOUNDS
 
     init {
-        generateHeatMap()
-        getMarkers(
-            DEFAULT_BOUNDS
-        )
-        observeActions()
+
+        viewModelScope.launch {
+            dbRepository.dbStateFlow.collect() {
+                screenState = screenState.copy(dbState = it)
+
+                when (it) {
+                    DBState.Unknown -> Unit
+                    DBState.Updating -> Unit
+                    DBState.Ready -> {
+                        generateHeatMap()
+                        getMarkers(
+                            DEFAULT_BOUNDS
+                        )
+                        observeActions()
+                    }
+                }
+            }
+        }
     }
 
     @OptIn(FlowPreview::class)
@@ -65,17 +80,18 @@ class MapScreenViewModel(
     private fun generateHeatMap() {
         viewModelScope.launch(projectDispatchers.ioDispatcher) {
             val allMovies = dbRepository.getAll()
-            val heatMapProvider = HeatmapTileProvider.Builder()
-                .data(allMovies.map { LatLng(it.lat, it.lon) })
-                .build()
-            screenState = screenState.copy(heatmapTileProvider = heatMapProvider)
+            if (allMovies.isNotEmpty()) {
+                val heatMapProvider = HeatmapTileProvider.Builder()
+                    .data(allMovies.map { LatLng(it.lat, it.lon) })
+                    .build()
+                screenState = screenState.copy(heatmapTileProvider = heatMapProvider)
+            }
         }
     }
 
     fun getMarkers(bonds: LatLngBounds) {
         mapBounds = bonds
 
-        Log.d("aaa", "getMarkers: $bonds")
         viewModelScope.launch(projectDispatchers.ioDispatcher) {
             val markers = dbRepository.getByLocation(
                 bonds.southwest.latitude,
