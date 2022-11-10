@@ -20,6 +20,7 @@ import com.eziosoft.moviesInParis.navigation.Destination
 import com.eziosoft.moviesInParis.presentation.ui.listScreen.listScreen
 import com.eziosoft.moviesInParis.presentation.ui.mapScreen.mapScreen
 import com.eziosoft.moviesInParis.presentation.ui.theme.PrimaryLight
+import com.eziosoft.parisinnumbers.R
 import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
