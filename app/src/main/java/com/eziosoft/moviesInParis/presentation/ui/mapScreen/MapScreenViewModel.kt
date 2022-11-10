@@ -1,6 +1,5 @@
 package com.eziosoft.moviesInParis.presentation.ui.mapScreen
 
-import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
@@ -23,7 +22,6 @@ data class ScreenState(
     val heatmapTileProvider: HeatmapTileProvider? = null,
     val selectedMovie: Movie? = null
 )
-
 
 private val DEFAULT_BOUNDS = LatLngBounds(
     LatLng(48.704137980738714, 2.1965618804097176),
@@ -75,7 +73,6 @@ class MapScreenViewModel(
     fun getMarkers(bonds: LatLngBounds) {
         mapBounds = bonds
 
-        Log.d("aaa", "getMarkers: $bonds")
         viewModelScope.launch(projectDispatchers.ioDispatcher) {
             val markers = dbRepository.getByLocation(
                 bonds.southwest.latitude,

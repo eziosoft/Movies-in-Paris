@@ -15,10 +15,12 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.eziosoft.moviesInParis.domain.repository.DBState
 import com.eziosoft.moviesInParis.presentation.ui.movieDetailsBottomSheet.MovieDetailsBottomSheet
 import com.eziosoft.moviesInParis.presentation.ui.rotating
+import com.eziosoft.parisinnumbers.R
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -48,9 +50,9 @@ private fun Updating() {
             Icon(
                 modifier = Modifier.rotating(3000),
                 imageVector = Icons.Filled.Refresh,
-                contentDescription = "Updating"
+                contentDescription = stringResource(R.string.updating)
             )
-            Text("Updating Database...")
+            Text(stringResource(R.string.updating_database))
         }
     }
 }
@@ -104,9 +106,9 @@ private fun SearchAndList(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
                     imageVector = Icons.Filled.Search,
-                    contentDescription = "empty list"
+                    contentDescription = stringResource(R.string.empty_list)
                 )
-                Text("Not found")
+                Text(stringResource(R.string.not_found))
             }
         }
     }

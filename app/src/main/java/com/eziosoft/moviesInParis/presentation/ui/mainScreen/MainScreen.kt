@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -24,6 +25,7 @@ import com.eziosoft.moviesInParis.navigation.Destination
 import com.eziosoft.moviesInParis.presentation.ui.listScreen.listScreen
 import com.eziosoft.moviesInParis.presentation.ui.mapScreen.mapScreen
 import com.eziosoft.moviesInParis.presentation.ui.theme.PrimaryLight
+import com.eziosoft.parisinnumbers.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,7 +89,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     },
                     actions = {
                         IconButton(onClick = { showMenu = !showMenu }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = "more")
+                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.more))
                         }
                         DropdownMenu(
                             expanded = showMenu,
@@ -100,8 +102,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
                                     showMenu = false
                                 }
                             ) {
-                                Text("Refresh database")
-                                Icon(Icons.Filled.Refresh, contentDescription = "Refresh database")
+                                Text(stringResource(R.string.refresh_database))
+                                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.refresh_database))
                             }
                         }
                     }
@@ -113,12 +115,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     navController = navController,
                     itemsList = listOf(
                         BottomNavItem(
-                            name = "List",
+                            name = stringResource(R.string.list),
                             route = Destination.LIST_SCREEN.name,
                             icon = Icons.Default.List
                         ),
                         BottomNavItem(
-                            name = "Map",
+                            name = stringResource(R.string.map),
                             route = Destination.MAP_SCREEN.name,
                             icon = Icons.Default.LocationOn
                         )

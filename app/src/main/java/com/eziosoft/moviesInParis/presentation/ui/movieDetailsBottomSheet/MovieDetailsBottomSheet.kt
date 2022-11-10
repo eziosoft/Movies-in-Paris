@@ -1,6 +1,5 @@
 package com.eziosoft.moviesInParis.presentation.ui.movieDetailsBottomSheet
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -75,7 +75,6 @@ private fun Content(movie: Movie) {
             modifier = Modifier,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Log.d("aaa", "Content: ${movie.posterUrl}")
             AnimatedVisibility(movie.posterUrl.isNotEmpty()) {
                 AsyncImage(
                     modifier = Modifier
@@ -93,28 +92,45 @@ private fun Content(movie: Movie) {
                     .padding(4.dp)
             ) {
                 Text(
-                    text = "Address: ${movie.address}",
+                    text = buildString {
+                        append(stringResource(R.string.address))
+                        append(movie.address)
+                    },
                     style = MaterialTheme.typography.body1,
                     color = Color.White
                 )
                 Text(
-                    text = "Time: ${movie.startDate} - ${movie.endDate}",
+                    text = buildString {
+                        append(stringResource(R.string.time))
+                        append(movie.startDate)
+                        append(" - ")
+                        append(movie.endDate)
+                    },
                     style = MaterialTheme.typography.body1,
                     color = Color.White
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Type: ${movie.type}",
+                    text = buildString {
+                        append(stringResource(R.string.type))
+                        append(movie.type)
+                    },
                     style = MaterialTheme.typography.body1,
                     color = Color.LightGray
                 )
                 Text(
-                    text = "Production: ${movie.producer}",
+                    text = buildString {
+                        append(stringResource(R.string.production))
+                        append(movie.producer)
+                    },
                     style = MaterialTheme.typography.body1,
                     color = Color.LightGray
                 )
                 Text(
-                    text = "Realisation: ${movie.realisation}",
+                    text = buildString {
+                        append(stringResource(R.string.realisation))
+                        append(movie.realisation)
+                    },
                     style = MaterialTheme.typography.body1,
                     color = Color.LightGray
                 )
