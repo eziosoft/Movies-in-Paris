@@ -1,16 +1,12 @@
 package com.eziosoft.moviesInParis.presentation.ui.mainScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,15 +16,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.eziosoft.moviesInParis.navigation.Action
 import com.eziosoft.moviesInParis.navigation.Destination
 import com.eziosoft.moviesInParis.presentation.ui.listScreen.listScreen
 import com.eziosoft.moviesInParis.presentation.ui.mapScreen.mapScreen
 import com.eziosoft.moviesInParis.presentation.ui.theme.PrimaryLight
-import com.eziosoft.parisinnumbers.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -71,44 +62,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
         },
         sheetPeekHeight = 0.dp
     ) { scaffoldPaddings1 ->
-        var showMenu by remember { mutableStateOf(false) }
-
         Scaffold(
-            modifier = Modifier
-                .padding(scaffoldPaddings1),
-            topBar = {
-                TopAppBar(
-                    title = {
-                        TopBar(
-                            onSearch = {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    viewModel.actionDispatcher.dispatchAction(Action.SearchMovie(it))
-                                }
-                            }
-                        )
-                    },
-                    actions = {
-                        IconButton(onClick = { showMenu = !showMenu }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.more))
-                        }
-                        DropdownMenu(
-                            expanded = showMenu,
-                            onDismissRequest = { showMenu = false }
-                        ) {
-                            DropdownMenuItem(
-                                modifier = Modifier
-                                    .background(PrimaryLight),
-                                onClick = {
-                                    showMenu = false
-                                }
-                            ) {
-                                Text(stringResource(R.string.refresh_database))
-                                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.refresh_database))
-                            }
-                        }
-                    }
-                )
-            },
+            modifier = Modifier.padding(scaffoldPaddings1),
             bottomBar = {
                 BottomNavigationBar(
                     modifier = Modifier,
@@ -137,14 +92,34 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 )
             }
         ) { scaffoldPaddings2 ->
-            NavHost(
-                modifier = Modifier.padding(scaffoldPaddings2),
+            ScreenContent(
                 navController = navController,
-                startDestination = startDestination
-            ) {
-                listScreen()
-                mapScreen()
-            }
+                startDestination = startDestination,
+                paddingValues = scaffoldPaddings2,
+                onSearch = {
+                    viewModel.search(text = it)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ScreenContent(
+    navController: NavHostController,
+    startDestination: String,
+    paddingValues: PaddingValues,
+    onSearch: (String) -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        TopBar(onSearch = { onSearch(it) })
+        NavHost(
+            modifier = Modifier.padding(paddingValues),
+            navController = navController,
+            startDestination = startDestination
+        ) {
+            listScreen()
+            mapScreen()
         }
     }
 }
