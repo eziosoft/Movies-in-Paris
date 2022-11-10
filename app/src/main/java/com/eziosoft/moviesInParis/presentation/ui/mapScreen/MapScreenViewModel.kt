@@ -1,8 +1,9 @@
 package com.eziosoft.moviesInParis.presentation.ui.mapScreen
 
-import android.util.Log
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eziosoft.moviesInParis.domain.Movie
@@ -47,7 +48,6 @@ class MapScreenViewModel(
 
         viewModelScope.launch {
             dbRepository.dbStateFlow.collect() {
-                Log.d("aaa", "$it: ")
                 screenState = screenState.copy(dbState = it)
 
                 when (it) {
