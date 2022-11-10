@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">Movies in Paris</string>
     <string name="search">Search</string>
+    <string name="updating_database">Updating Database…</string>
+    <string name="updating">Updating</string>
+    <string name="empty_list">empty list</string>
+    <string name="not_found">Not found</string>
+    <string name="more">more</string>
+    <string name="refresh_database">Refresh database</string>
+    <string name="list">List</string>
+    <string name="map">Map</string>
+    <string name="address">Address: </string>
+    <string name="time">Time: </string>
+    <string name="type">Type: </string>
+    <string name="production">Production: </string>
+    <string name="realisation">Realisation: </string>
+    <string name="clear">Clear</string>
 </resources>

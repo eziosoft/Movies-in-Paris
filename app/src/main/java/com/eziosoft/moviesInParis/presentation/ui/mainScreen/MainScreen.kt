@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -19,6 +20,7 @@ import com.eziosoft.moviesInParis.navigation.Destination
 import com.eziosoft.moviesInParis.presentation.ui.listScreen.listScreen
 import com.eziosoft.moviesInParis.presentation.ui.mapScreen.mapScreen
 import com.eziosoft.moviesInParis.presentation.ui.theme.PrimaryLight
+import com.eziosoft.parisinnumbers.R
 import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -69,12 +71,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     navController = navController,
                     itemsList = listOf(
                         BottomNavItem(
-                            name = "List",
+                            name = stringResource(R.string.list),
                             route = Destination.LIST_SCREEN.name,
                             icon = Icons.Default.List
                         ),
                         BottomNavItem(
-                            name = "Map",
+                            name = stringResource(R.string.map),
                             route = Destination.MAP_SCREEN.name,
                             icon = Icons.Default.LocationOn
                         )

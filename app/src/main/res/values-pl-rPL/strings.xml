@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Filmy w Paryżu</string>
+    <string name="search">Szukaj</string>
+    <string name="updating_database">Aktualizuję bazę danych…</string>
+    <string name="updating">Aktualizacja</string>
+    <string name="empty_list">pusta lista</string>
+    <string name="not_found">Nie znaleziono</string>
+    <string name="more">wiecej</string>
+    <string name="refresh_database">Odśwież bazę danych</string>
+    <string name="list">Lista</string>
+    <string name="map">Mapa</string>
+    <string name="address">"Adres: "</string>
+    <string name="time">"Okres: "</string>
+    <string name="type">"Typ: "</string>
+    <string name="production">"Produkcja: "</string>
+    <string name="realisation">"Realizacja: "</string>
+    <string name="clear">Wyczyść</string>
+</resources>
