@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.eziosoft.moviesInParis.domain.Movie
+import com.eziosoft.moviesInParis.domain.repository.DBState
+import com.eziosoft.moviesInParis.presentation.ui.components.Updating
 import com.eziosoft.moviesInParis.presentation.ui.movieDetailsBottomSheet.MovieDetailsBottomSheet
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
@@ -16,23 +18,34 @@ private val PARIS_POSITION = LatLng(48.8566, 2.3522)
 @Composable
 fun MapScreen(modifier: Modifier = Modifier.fillMaxSize()) {
     val viewModel: MapScreenViewModel = getViewModel()
-    Map(
-        viewModel = viewModel,
-        modifier = modifier,
-        onBoundsChange = { bonds ->
-            bonds?.let {
-                viewModel.getMarkers(it)
+
+    Box(
+        modifier = modifier
+    ) {
+        when (viewModel.screenState.dbState) {
+            DBState.Unknown -> Unit
+            DBState.Updating -> Updating()
+            DBState.Ready -> {
+                Map(
+                    viewModel = viewModel,
+                    modifier = modifier,
+                    onBoundsChange = { bonds ->
+                        bonds?.let {
+                            viewModel.getMarkers(it)
+                        }
+                    },
+                    onMarkerClick = { markerId ->
+                        viewModel.showMovieDetails(
+                            id = markerId,
+                            content = {
+                                MovieDetailsBottomSheet()
+                            }
+                        )
+                    }
+                )
             }
-        },
-        onMarkerClick = { markerId ->
-            viewModel.showMovieDetails(
-                id = markerId,
-                content = {
-                    MovieDetailsBottomSheet()
-                }
-            )
         }
-    )
+    }
 }
 
 @Composable

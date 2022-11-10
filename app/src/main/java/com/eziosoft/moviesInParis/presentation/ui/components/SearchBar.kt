@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBox(
+fun SearchBar(
     modifier: Modifier = Modifier,
     onSearch: (String) -> Unit
 ) {

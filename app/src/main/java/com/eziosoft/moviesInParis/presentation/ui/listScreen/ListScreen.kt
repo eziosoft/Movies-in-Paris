@@ -6,11 +6,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.eziosoft.moviesInParis.domain.repository.DBState
+import com.eziosoft.moviesInParis.presentation.ui.components.Updating
 import com.eziosoft.moviesInParis.presentation.ui.movieDetailsBottomSheet.MovieDetailsBottomSheet
-import com.eziosoft.moviesInParis.presentation.ui.rotating
 import com.eziosoft.parisinnumbers.R
 import org.koin.androidx.compose.getViewModel
 
@@ -41,24 +39,7 @@ fun ListScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Updating() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                modifier = Modifier.rotating(3000),
-                imageVector = Icons.Filled.Refresh,
-                contentDescription = stringResource(R.string.updating)
-            )
-            Text(stringResource(R.string.updating_database))
-        }
-    }
-}
-
-@Composable
-private fun SearchAndList(
+fun SearchAndList(
     viewModel: ListScreenViewModel,
     state: ScreenState,
     listState: LazyGridState
