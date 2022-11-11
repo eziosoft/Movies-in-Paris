@@ -16,4 +16,6 @@
     <string name="production">"Produkcja: "</string>
     <string name="realisation">"Realizacja: "</string>
     <string name="clear">Wyczyść</string>
+    <string name="Normal">Normalna</string>
+    <string name="Satellite">Satelitarna</string>
 </resources>
