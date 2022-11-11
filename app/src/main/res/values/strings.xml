@@ -15,4 +15,6 @@
     <string name="production">Production: </string>
     <string name="realisation">Realisation: </string>
     <string name="clear">Clear</string>
+    <string name="Normal">Normal</string>
+    <string name="Satellite">Satellite</string>
 </resources>

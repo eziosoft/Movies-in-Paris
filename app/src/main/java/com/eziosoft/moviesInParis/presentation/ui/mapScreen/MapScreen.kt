@@ -1,13 +1,27 @@
 package com.eziosoft.moviesInParis.presentation.ui.mapScreen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.eziosoft.moviesInParis.domain.Movie
 import com.eziosoft.moviesInParis.domain.repository.DBState
 import com.eziosoft.moviesInParis.presentation.ui.components.Updating
 import com.eziosoft.moviesInParis.presentation.ui.movieDetailsBottomSheet.MovieDetailsBottomSheet
+import com.eziosoft.moviesInParis.presentation.ui.theme.PrimaryLight
+import com.eziosoft.parisinnumbers.R
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
 import com.google.maps.android.heatmaps.HeatmapTileProvider
@@ -19,6 +33,10 @@ private val PARIS_POSITION = LatLng(48.8566, 2.3522)
 fun MapScreen(modifier: Modifier = Modifier.fillMaxSize()) {
     val viewModel: MapScreenViewModel = getViewModel()
 
+    var mapType by remember {
+        mutableStateOf(MapType.NORMAL)
+    }
+
     Box(
         modifier = modifier
     ) {
@@ -28,6 +46,7 @@ fun MapScreen(modifier: Modifier = Modifier.fillMaxSize()) {
             DBState.Ready -> {
                 Map(
                     viewModel = viewModel,
+                    mapType = mapType,
                     modifier = modifier,
                     onBoundsChange = { bonds ->
                         bonds?.let {
@@ -43,6 +62,42 @@ fun MapScreen(modifier: Modifier = Modifier.fillMaxSize()) {
                         )
                     }
                 )
+
+                var menuExpanded by remember {
+                    mutableStateOf(false)
+                }
+
+                Box(
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(30.dp)
+                ) {
+                    Icon(
+                        modifier = Modifier.clickable { menuExpanded = true },
+                        imageVector = Icons.Filled.List,
+                        contentDescription = "Layers"
+                    )
+
+                    DropdownMenu(
+                        modifier = Modifier.background(PrimaryLight),
+
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(onClick = {
+                            mapType = MapType.NORMAL
+                            menuExpanded = false
+                        }) {
+                            Text(stringResource(R.string.Normal))
+                        }
+                        DropdownMenuItem(onClick = {
+                            mapType = MapType.SATELLITE
+                            menuExpanded = false
+                        }) {
+                            Text(stringResource(R.string.Satellite))
+                        }
+                    }
+                }
             }
         }
     }
@@ -51,6 +106,7 @@ fun MapScreen(modifier: Modifier = Modifier.fillMaxSize()) {
 @Composable
 private fun Map(
     viewModel: MapScreenViewModel,
+    mapType: MapType,
     onBoundsChange: (LatLngBounds?) -> Unit,
     modifier: Modifier = Modifier,
     onMarkerClick: (id: String) -> Unit
@@ -63,10 +119,10 @@ private fun Map(
         position = CameraPosition.fromLatLngZoom(PARIS_POSITION, 11f)
     }
     val uiSettings by remember { mutableStateOf(MapUiSettings()) }
-    val properties by remember {
+    val properties by remember(mapType) {
         mutableStateOf(
             MapProperties(
-                mapType = MapType.NORMAL,
+                mapType = mapType,
                 mapStyleOptions = MapStyleOptions(mapStyle)
             )
         )
